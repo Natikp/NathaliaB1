@@ -1,0 +1,106 @@
+app.html
+<template>
+  <lightning-card title="Formulário">
+    <div class="slds-m-around_medium">
+			<lightning-input label="Nome" type="text" name="nome" onchange={handleInputChange}></lightning-input>
+		
+			<lightning-input label="Peso" type="number" name="peso" onchange={handleInputChange}></lightning-input>
+		
+			<lightning-input label="Altura" type="text" name="altura" onchange={handleInputChange}></lightning-input>
+			
+			<lightning-button variant="brand" label="clica e ve" title="Enviar os Dados" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+			<p>{message}</p>	
+		</div>
+  </lightning-card>
+</template>
+.............> app.js
+import { LightningElement } from "lwc";
+
+export default class App extends LightningElement {
+ 
+  nome
+  peso
+  altura
+  result
+  message
+
+  handleInputChange(event) {
+    // console.log(event.target.name)
+    // console.log(event.detail.value)
+
+    let nameInput = event.target.name
+    let value = event.detail.value
+    if(nameInput = 'nome') {
+      this.nome = value
+    }
+    if(nameInput = 'peso') {
+      this.peso = value
+    }
+    if(nameInput = 'altura') {
+      this.altura = value
+    }
+  }
+  handleClick(event) {
+
+    this.calcularImc()
+    
+  }
+  calcularImc() {
+    if(this.peso && this.altura) {
+      this.altura = this.altura / 100;
+      this.result = (this.peso / (this.altura * this.altura)).toFixed(2)
+      this.message = `${this.nome} o Seu IMC é de ${this.result}`
+    }
+  }
+}
+
+..................>>>>> Resposta Questão 02
+
+...................>> app.html
+<template>
+  <lightning-card title="Formulário">
+    <div class="slds-m-around_medium">
+			<lightning-input label="Nome" type="text" name="firstName" onchange={handleInputChange}></lightning-input>
+			<lightning-input label="Sobrenome" type="text" name="lastName" onchange={handleInputChange}></lightning-input>
+			<lightning-input label="Site" type="text" name="website" onchange={handleInputChange}></lightning-input>
+			<lightning-input label="Empresa" type="text" name="empresa" onchange={handleInputChange}></lightning-input>
+			<lightning-input label="Receita Anual" type="number" name="receitaAnual" onchange={handleInputChange}></lightning-input>
+			
+			<lightning-button variant="brand" label="clica e ve" title="Enviar os Dados" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+			<p>{result}</p>	
+		</div>
+  </lightning-card>
+</template>
+
+........................>>>>>>>>>> app.js
+import { LightningElement } from "lwc";
+
+export default class App extends LightningElement {
+  inputs = {
+    firstName: '',
+    lastName: '',
+    website: '',
+    empresa: '',
+    receitaAnual: ''
+  }
+  result
+  handleInputChange(event) {
+    // console.log(event.target.name)
+    // console.log(event.detail.value)
+
+    let nameInput = event.target.name
+    let value = event.detail.value
+
+    this.inputs = {
+     ...this.inputs, [nameInput]: value
+    }
+    console.log(this.inputs)
+  }
+  handleClick() {
+    this.result = `Nome: ${this.inputs.firstName}
+                   SobreNome: ${this.inputs.lastName}
+                   Site: ${this.inputs.website}
+                   Empresa: ${this.inputs.empresa}
+                   Receita Anual: ${this.inputs.receitaAnual}`
+  }
+}
