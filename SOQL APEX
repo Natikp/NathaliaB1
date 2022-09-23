@@ -1,0 +1,33 @@
+// Some os valores de todas as oportunidades que foram perdidas no ultimo mês e agrupe pelo motivo da perda
+
+SELECT Account.Name, COUNT(Id), FORMAT(SUM(Amount))
+FROM Opportunity
+WHERE CreatedDate = LAST_MONTH
+GROUP BY Account.Name
+
+
+
+// Retorne todos os contatos das contas que possuem contas pai
+
+
+// Retorne o número de registros de contatos  da conta 'Restaurante Gifara'
+ 
+ List<Case> lstCase = [SELECT Id, CaseNumber FROM Case];
+System.debug('lstCase');
+List<Case> Casos = [SELECT CaseNumber, CreatedDate FROM Case];
+    System.debug (Casos);
+
+LIST<Despesa__c> listaDespesa = [SELECT Id, Name, Tipo__c FROM Despesa__c];
+System.debug(listaDespesa);
+
+List <Despesa__c> listaDespesasNull = [SELECT Id, Tipo__c FROM Despesa__c WHERE Tipo__c = null];
+System.debug(listaDespesasNull);
+
+List<Opportunity> lstOpp = [SELECT Id, Amount, Name FROM Opportunity];
+for(Opportunity ABoaATop : lstOpp){
+system.debug(ABoaATop.lstOpp);
+system.debug(ABoaATop.Amount);
+system.debug(ABoaATop.Account.Name);
+}
+
+DML(Data manipulation language
