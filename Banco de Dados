@@ -1,0 +1,57 @@
+ATIVIDADE SOQL
+
+1. Selecione o nome, valor e data de fechamento das oportunidades.
+
+R : SELECT name, amount, id, CloseDate FROM Opportunity
+
+2. Selecione o nome e valor das oportunidades com data de fechamento maior que 01/06/2021.
+
+R : SELECT CloseDate FROM Opportunity where closedate > LAST_N_DAYS:67
+
+3. Selecione o nome da oportunidade, valor, descrição e next step das oportunidades com fase Closed won e valor acima de 100000.
+
+R : SELECT name, nextstep, amount, description FROM Opportunity where stagename = 'closed won' AND amount > 100000
+
+4. Selecione o nome, classificação, tipo, ano de início das contas que possuam ‘Uni’ no começo do nome da conta.
+ 
+R: SELECT name, type, yearstarted, rating FROM Account where name LIKE '%Uni%'
+
+5. Selecione o nome completo, empresa e email dos leads com ‘.net’ no final do email e status do lead como Working - Contacted.
+
+R : SELECT Name , Company, Email , Status FROM Lead WHERE Email LIKE '%.net' and Status =  'Working - Contacted'
+
+8. Selecione o nome, valor, fase, next step e descrição das oportunidades que possuem ‘Oil’ ou ‘Gene’ em qualquer parte do nome.
+
+R :  SELECT Id, Name, Amount, StageName, NextStep FROM Opportunity WHERE Name LIKE '%Oil%' OR Name LIKE '%Gene%'
+
+9.Selecione todas as despesas sem valor, junto com o nome do cliente relacionado, ordenadas alfabeticamente
+
+R: SELECT Id, Name, Valor__c, Conta__r.Name FROM Despesa__c WHERE Valor__c = null ORDER BY Conta__r.Name
+
+10. Selecione o nome, telefone de contas e o nome, valor e fase das oportunidades ligadas a cada conta.
+
+R : SELECT Name , AMOUNT ,StageName, Account.name, Account.phone FROM Opportunity
+
+11. Selecione os emails repetidos em lead.
+
+R : select email from lead group by email having count(email)>1
+
+12. Selecione as despesas em que as contas sejam clientes VIPs.
+
+R : SELECT name FROM Despesa__c Where Account__c.VIP__c = true
+
+13. Selecione os clientes agrupados pelo ramo de empresa que possuem uma renda anual maior que 1000 reais.
+
+R : SELECT industry FROM Account WHERE Annualrevenue > 1000 GROUP BY industry
+
+14. Selecione todas as oportunidades em que os clientes tenham sido criado no mês de julho.
+
+R : select name, createddate from opportunity where createddate > last_month
+
+15. Selecione os usuários que fizeram login no sistema, no ultimo mês.
+
+R : SELECT LastActivityDate FROM Account where LastActivityDate = LAST_MONTH
+
+16. Selecione os leads que foram atualizados por um usuário com perfil de administrador do sistema no mês atual.
+
+R : Select Id, Name, LastModifiedBy.Name From Lead Where LastModifiedBy.Profile.Name ='system Administrator' AND LastModifiedDate  = THIS_MONTH
