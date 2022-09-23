@@ -1,0 +1,172 @@
+Aranha Aranha1 = new Aranha();
+       Aranha1.nome = 'Sei lá';
+     Aranha1.peso = 1;
+       Aranha1.raca = 'Aranha marrom';
+       Aranha1.idade = 7;
+       Aranha1.cor = 'laranja';
+
+  system.debug(Aranha1);
+
+Cobra cobra1 = new Cobra();
+       cobra1.nome = 'Celeste';
+     cobra1.peso = 12;
+       cobra1.raca = 'Naja';
+       cobra1.idade = 7;
+       cobra1.cor = 'Preta';
+
+  system.debug(cobra1);
+
+ public class Cobra { 
+  Public String nome ;
+   Public decimal peso;
+    Public string raca;
+   Public string cor;
+   Public integer idade;
+      
+   
+  }  
+
+====
+
+public void quando não for retornar nada.
+Ex: 
+public void falar(){
+
+  system.debug('auauau');
+
+
+}
+
+
+
+Cobra cobra1 = new Cobra();
+       cobra1.nome = 'Celeste';
+     cobra1.peso = 12;
+       cobra1.raca = 'Naja';
+       cobra1.idade = 7;
+       cobra1.cor = 'Preta';
+
+  system.debug(cobra1);
+
+Colocar no public:
+
+public void falar(){
+    system.debug('tstststssss');
+}
+public void dormir(){
+    system.debug('ZZZZzzzzzzzz');
+}
+public void comer(){
+    system.debug('bora cumê um ratin?');
+}
+
+cachorro.apresentar();
+cachorro1.apresentar();
+
+
+
+system.debug('Meu nome é ' + nome + ', meu peso é ' + peso + ' kg, e minha raça é ' + raca);
+
+Gato mingal = new Gato();
+
+mingal.nome = 'Mingal';
+mingal.peso = 5.8;
+mingal.raca = 'Persa';
+
+system.debug (mingal);
+mingal.infoGato();
+
+Gato gato1 = new Gato();
+gato1.nome = 'Mingau';
+gato1.peso = 8.0;
+gato1.raca = 'Vira-lata';
+
+System.debug(gato1);
+gato1.miar();
+gato1.andar();
+gato1.ronronar();
+
+System.debug(gato1);
+gato1.infoGato();
+public class Gato {
+    
+    public String nome;
+    public Decimal peso;
+    public String raca;
+	
+    public void miar(){
+        System.debug(' MIAAAAAUU');
+    }
+    
+    public void andar(){
+        System.debug(' está andando');
+    }
+    
+    public void ronronar(){
+        System.debug(' está ronronando');
+    }
+    
+    public void infoGato(){
+        system.debug('Meu nome é ' + nome + ', meu peso é ' + peso + ' kg, e minha raça é ' + raca);
+    }
+    
+    
+}
+
+public class Calculadora {
+     
+    public Integer somar(Integer n1, integer n2){
+    Integer resultado = n1 + n2;
+    System.debug('O resultado é:' + resultado);
+    
+    Return resultado;
+    
+    }
+	
+     public Integer subtrair(Integer n1, Integer n2){
+        Integer resultado = n1 - n2;
+         system.debug('O resultado é: '+ resultado);
+                      Return resultado;
+    }
+public Integer dividir(Integer n1, Integer n2){
+         if (n2 == 0){
+             System.debug('Não é possível dividir por 0');
+             return 0;
+         }else{
+            return n1 / n2;
+         }
+         
+     }
+     public Integer multiplicar(Integer n1, Integer n2){
+        Integer resultado = n1 * n2;
+         system.debug('O resultado é: '+resultado);
+         Return resultado;
+    }
+	
+}
+
+public String pedir(String pizza) {
+        if (calabresa) {
+            system.debug('Pizza de Calabresa, valor R$ 45,00');
+            return pizza
+        }else if(quatroQueijos) {
+            system.debug('Pizza 4 Queijos, valor R$ 50,00');
+            return pizza
+        } else if (mariaBonita) {
+            system.debug('Pizza Maria Bonita, R$ 60,00');
+            return pizza
+        } else {
+            system.debug('Não possuímos essa Pizza.');
+        }
+
+Cobra cobra1 = new Cobra();
+       cobra1.nome = 'Celeste';
+     cobra1.peso = 12;
+       cobra1.raca = 'Naja';
+       cobra1.idade = 7;
+       cobra1.cor = 'Preta';
+
+  system.debug(cobra1);
+cobra1.falar  ();
+cobra1.comer  ();
+cobra1.apresentar();
