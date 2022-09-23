@@ -1,0 +1,51 @@
+1.
+Integer numero = 25;
+System.debug(numero);
+
+2. 
+String nomeProduto = ('camiseta');
+Decimal Valor =  29.90;
+System.debug (nomeProduto + Valor);
+
+3.
+Integer numero = 80;
+System.debug (--numero);
+
+4.
+Integer n2 = 35;
+Integer resultadosoma = n1 + n2;
+System.debug(resltadosoma);
+
+
+5.
+Integer Idade = 31;
+Integer Ano = 2022;
+Integer Resultado = Ano - Idade ou Resultado;
+System.debug ('Nascido em ' + Resultado);
+
+
+6. 
+Integer base = 10;
+Integer altura = 15;
+Integer Resultado = base * altura;
+System.debug('A área do retângulo' + base * altura);
+
+7. String Funcionario = 'Jose Miguel';
+Decimal SalarioMensal = 1500.21;
+Decimal Reajuste = SalarioMensal*1.25;
+System.debug('O Funcionario '  + Funcionario + ' vai receber ' + Reajuste.setScale(2)); Obs: SetScale para definir as casas decimais.
+
+
+8.
+Decimal p1 = 10;
+Decimal p2 = 7.5;
+Decimal p3 = 5.4;
+Decimal SomaDasPvs = (p1 + p2 + p3)/3;
+System.debug(SomaDasPvs.SetScale(2));
+
+9.
+Decimal p1 = 2;
+Decimal p2 = 3;
+Decimal p3 = 5;
+Decimal media = (p1*2+p2*3+p3*5)/10;
+System.debug(' Média da nota é '+ media.setScale(2));
