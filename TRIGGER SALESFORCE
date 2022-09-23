@@ -1,0 +1,58 @@
+Map<String, Integer> mapNomeIdade = new Map<String, Integer>();
+
+map de nome e sobrenome
+map de nome e hobbies(N)
+Map de Nome e Altura
+
+Map<String, String> colorCodes = new Map<String, String>();
+
+colorCodes.put('Red', 'FF0000');
+colorCodes.put('Blue', '0000A0');
+
+List<String> colors = new List<String>();
+colors = colorCodes.values();
+Returns a list that contains all the values in the map.
+
+====
+
+Map<String, List<String>> mapNomeHobbies = new Map<String,List<String>>();
+
+List<String> hobbieCleiton = new List<String>();
+hobbieCleiton.add('Dançar');
+hobbieCleiton.add('Cantar'); 
+hobbieCleiton.add('Debochar');
+mapNomeHobbies.put('Cleiton',hobbieCleiton);
+
+List<String> hobbieGato = new List<String>();
+hobbieGato.add('Dançar');
+hobbieGato.add('Cantar'); 
+hobbieGato.add('Comer');
+mapNomeHobbies.put('Gato Motoka',hobbieGato);
+
+Veio aí o Trigger brabo!
+
+Validação se o telefone estiver em branco
+$!Record> Registro que disparou o flow
+Trigger.new(é uma lista / <Objeto daTr
+
+Pegar qual registro/ quais registros dispararam a trigger
+//Verificar se o telefone dos registros estão em branco
+///Caso sim, mostro um erro.
+
+=====
+
+trigger accountTrigger on Account (before insert) {
+
+//validação se o telefone estiver em branco
+
+// $!Record > registro que disparou o flow
+//trigger.new > registro que disparou a trigger
+//trigger.new  é uma lista 
+//trigger.new é do tipo List<ObjetodaTrigger>   list<account>
+For(account itemacc : trigger.new){
+    //pegara todos os registros que acionaram a trigger
+
+    if(itemacc.phone ==null){
+        //Quero dar um erro
+    }
+}
