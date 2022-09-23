@@ -1,0 +1,32 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+ <lightning:título de cartão="Novo Lead", >
+        <div class="slds-p-around_medium"> </div>
+
+    <lightning:recordEditForm aura:id="recordEditForm"
+ objectApiName="Chumbo" 
+                              onsuccess="{!c.handleClick}">
+        
+ <lightning:mensagens />
+        <lightning:inputField fieldName="Name" />
+ <lightning:inputField fieldName="Telefone" />
+        <lightning:inputField fieldName="Status" />
+        <lightning:inputField fieldName="Company" />
+ <lightning:button class="slds-m-top_small" type="submit" label="Criar novo" />
+ </relâmpago:recordEditForm>
+
+ </relâmpago:cartão>
+</aura:componente>
+    
+---------------------------------------------------------------------------------------------------------
+
+({
+ handleClick : função (componente, evento, ajudante){
+ var toastEvent = $A.get ("e.force:showToast");
+         toastEvent.setParams({
+ 'título' : 'Feito!',
+ 'mensagem' : 'Criado com sucesso, obrigadinha!',
+ 'tipo' : 'sucesso'
+        });
+        toastEvent.fire();
+	}
+})
