@@ -1,0 +1,35 @@
+01 -
+Escreva um programa em JavaScript que apresente uma caixa de alerta para o usuário com uma informação qualquer.
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JavaScript Exercício</title>
+    <script>
+      alert("Atenção: Aprenda JavaScript!");
+    </script>
+  </head>
+  <body>
+    <h1>Exercício 01</h1>
+  </body>
+</html>
+
+
+02 -
+Faça um programa em JavaScript em que o usuário clicará com o mouse
+sobre um botão e em seguida uma mensagem de alerta será apresentada com
+uma mensagem qualquer.
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JavaScript Exercício</title>
+    <script>
+      function minhaFuncao() {
+        alert("Você clicou no botão!");
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Exercício 02</h1>
+    <button onclick="minhaFuncao()">Clique aqui!</button>
+  </body>
+</html>
