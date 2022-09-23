@@ -1,0 +1,31 @@
+Some os valores de todas as oportunidades que
+ foram perdidas no ultimo mês e agrupe pelo motivo da perda
+
+SELECT SUM(Amount) FROM Opportunity WHERE Probability = 0 group by stagename
+
+// Retorne todos os contatos das contas que possuem contas pai
+
+SELECT account.name FROM account
+
+// Retorne o número de registros de contatos
+  da conta 'Restaurante Gifara' 
+
+SELECT contact.name FROM contact WHERE account.name = 'restaurante gifara'
+
+// Retorne o número de registros de Oportunidades
+  da conta 'Restaurante Gifara' 
+
+select opportunity.name from opportunity where account.name = 'restaurante gifara'
+
+// Selecione o Id e Nome dos tipos de registro do
+ objeto Despesa e Oportunidade
+
+
+
+// Selecione qual são os tipos de caso que são mais
+ abertos durante o mês atual
+
+select type, status from case where status != 'closed'
+
+// Selecione quais são as despesas criadas por
+ empresas que estão inativas
