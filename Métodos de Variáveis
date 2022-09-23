@@ -1,0 +1,32 @@
+Métodos de Variáveis:
+O que é o Método = Função = Gatilho = Acionador> é quando ele executa uma função, por ex: System.debug();
+
+Obs: O sistema não aceita ",", somente ".".
+Variavel do tipo String = Caracteres Alfanumericos; nome, telefone, datas...
+//Defino uma variavel
+toLowerCase<letra minúscula>()
+toUpperCase<letra maiuscula>()
+
+TipoDaVariavel + NomeDaVariavel = EoValorDaVariavel
+
+2 tipos de comentários
+Por linha: //
+Varias Linhas: /*   */
+
+string bandafavorita = 'jorge e mateus';
+// Mostrando 'Banda ' e a variavel bandaFavorita
+system.debug('Banda ' + bandafavorita);
+string bandafavoritaEmMaiusculo = bandafavorita.toUpperCase();
+// Mostrando ''Banda em maiusculo' e a variavel bandafavoritaEmMaiusculo
+system.debug('Banda em maiusculo' + bandafavoritaEmMaiusculo);
+string bandafavoritaEmMinusculo = bandafavorita.toLowerCase();
+System.debug('Banda em minusculo' + bandafavoritaEmMinusculo);
+
+meu ex:
+
+String bandaFavorita = ' The Doors ';
+System.debug(' Banda ' + bandaFavorita);
+String bandaFavoritaMais = bandaFavorita.toUpperCase();
+System.debug('Banda em maiusculo' + bandaFavoritaMais);
+String bandaFavoritaMin = bandaFavorita.toLowerCase();
+System.debug('Banda em minusculo' + bandaFavoritaMin);
