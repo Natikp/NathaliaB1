@@ -1,0 +1,22 @@
+Data Manipulation Language
+Selecionar os campos Nome do objeto conta.
+
+SELECT Name, Phone
+FROM Account
+Selecionando o campo Nome e telefone do ctt.
+SELECT ((campos))
+FROM ((objeto))
+
+
+StatusdaAprovacao__c
+	Valordespesa__c
+	DataPagamento__c
+	Valor__c
+Conta__c
+SELECT 	CloseDate, StageName, 	Name
+FROM Opportunity
+
+
+SELECT Rating
+FROM Lead
+WHERE Rating = 'Hot'
