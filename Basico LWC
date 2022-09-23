@@ -1,0 +1,140 @@
+ arquivo : app.html
+
+<template>
+
+
+  <lightning-card title="Div 1" id="div1">
+    <div class="slds-p-around_medium">
+      <p>Empresa: {empresa}</p>
+      <p>CNPJ: {cnpj}</p>
+      <p>Endereço: {end}</p>
+    </div>
+  </lightning-card>
+
+
+  <template if:false={visivel} class="cards">
+    <lightning-card title="Div 2" id="div2">
+      <div class="slds-p-around_medium test">
+        <p>Produto: {produto}</p>
+        <p>Descrição: {desc}</p>
+        <p>Preço: {preco}</p>
+      </div>
+    </lightning-card>
+  </template>
+
+  <template if:false={visivel} class="cards">
+    <lightning-card title="Div 3" id="div3">
+      <div class="slds-p-around_medium test">
+        <p>Promoção: {promocao}</p>
+        <p>Oferta 1: {oferta1}</p>
+        <p>Oferta 2: {oferta2}</p>
+        <p>Teste result: {result}</p>
+      </div>
+    </lightning-card>
+  </template>
+
+  <div class="slds-p-around_medium test">
+    <lightning-button variant="destructive" label="Destructive" title="Destructive action" onclick={handleOnClick}
+      class="slds-m-left_x-small"></lightning-button>
+  </div>
+
+
+  <lightning-card title="Quem é esse Pokémon" id="div4">
+    <h2>Meu pokémon</h2>
+    <div class="slds-p-around_medium">
+      <template if:false={pokemon}>
+        <div class="myImage">
+          <img src="https://img.playbuzz.com/image/upload/ar_1.5,c_pad,f_jpg,b_auto/q_auto:good,f_auto,fl_lossy,w_640,c_limit,dpr_1/cdn/5dd1da62-7fad-4065-ac16-928d743a2176/7af3b478-4cfa-4fce-8c24-af07c24c38c5.jpg" />
+        </div>
+      </template>
+      <template if:true={pokemon}>
+        <div class="myImage">
+          <img src="https://img.playbuzz.com/image/upload/ar_1.5,c_pad,f_jpg,b_auto/q_auto:good,f_auto,fl_lossy,w_640,c_limit,dpr_1/cdn/5dd1da62-7fad-4065-ac16-928d743a2176/98a48255-bedb-46d7-8f6e-a54229d3c75d.jpg" />
+        </div>
+      </template>
+      <div class="slds-p-around_medium test">
+    <lightning-button variant="destructive" label="Revelar Pokémon" title="Destructive action" onclick={revelarPokemon}
+      class="slds-m-left_x-small"></lightning-button>
+  </div>
+    </div>
+  </lightning-card>
+
+</template>
+
+
+**** arquivo : app.js
+
+import { LightningElement } from "lwc";
+const obj = new Object
+obj.empresa = 'MAMACO CORP'
+obj.cnpj = 123124123
+obj.end = 'rua tal casa tal'
+obj.produto = 'Lapis'
+obj.desc = 'um lapis muito bonito cinza'
+obj.preco = 5.00
+obj.promocao = '10%'
+obj.oferta1 =  'ganha um abraço'
+obj.oferta2 = 'ganha um bombom'
+obj.num1 = 5
+obj.num2 = 10
+// lwc permite fazer composição de função porem não permite componentes funcionais TRISTE
+// https://rfcs.lwc.dev/rfcs/lwc/0000-functional-components#lightning-web-components-functional-component-definition
+const somar = a => b => a + b
+const {empresa, cnpj, end, produto, desc, preco, promocao, oferta1, oferta2, num1, num2} = obj
+
+export default class App extends LightningElement {
+  empresa = empresa
+  cnpj = cnpj
+  end = end
+  produto = produto
+  desc = desc
+  preco = preco
+  promocao = promocao
+  oferta1 = oferta1
+  oferta2 = oferta2
+  
+  visivel = false
+  pokemon = true
+  num1 = num1
+  num2 = num2
+  result = somar(num1)(num2)
+  revelarPokemon() {
+    this.pokemon = !this.pokemon
+  }
+  handleOnClick() {
+    this.visivel = !this.visivel
+    //   this.template.querySelectorAll('lightning-card').forEach(function(item) {
+    //    console.log(item)
+    //  })
+
+    // this.template.childNodes.forEach(item => {
+    //   console.log(item)
+    // })
+    
+  }
+}
+
+
+**** arquivo : app.css
+
+h1 {
+    color: rgb(0, 112, 210);
+}
+p {
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    color: rgb(62, 62, 60);
+}
+.app {
+    background-color: #fafaf9;
+    height: 100vh;
+    overflow: scroll;
+}
+
+.myImage {
+    width: 200px;
+    margin: 0 auto;
+}
+
+h2 {
+    text-align: center;
+}
