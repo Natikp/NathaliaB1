@@ -1,0 +1,45 @@
+1)  Selecione nome completo, empresa, celular, de todos os leads.
+
+R : select name , company , MobilePhone from  lead
+
+
+2) Selecione empresa, Origem do lead, status do lead, e-mail de todos os leads.
+
+R : select leadsource , status , email from  lead
+
+3) Selecione nome da oportunidade, valor de todas oportunidades, Quem Criou, origem, fase.
+
+R : select name , amount , createdbyid , leadsource , stagename from opportunity
+
+4)Selecione order number, nome da oportunidade, origem do lead, valor, fase e probabilidade de todas oportunidades.
+
+R : select name , amount , leadsource , probability , stagename from opportunity
+
+5) Selecione Empresa, Nome Completo, CNPJ, Endereço, Telefone, Origem do Lead, receita anual, email, status do lead, de todos os leads.
+
+R : select company, name , address, phone, leadsource, annualrevenue, email, status from lead
+
+6)  Selecione Conta, Nome, Horário de funcionamento, Setor, Telefone, FAX, tipo, CNPJ,  de todas as contas
+
+R : select createdbyid, name, phone, fax, type, industry, yearstarted from account
+
+7) Os funcionários da empresa MAMACO CORP está com problemas para organizar as informações de seus contatos, 
+para isso eles contrataram desenvolvedores para auxiliarem na tarefa. Selecione todos os contatos e o nome da conta relacionada a esses contatos.
+
+R : select accountid, name from contact
+
+// estou usando uma org fantasia no trailhead e nao tenho alguns objetos personalizados.
+
+
+
+
+06,08
+
+
+1 =  SELECT Id FROM opportunity WHERE CloseDate = THIS_MONTH
+
+2 = SELECT name, id FROM Despesas__c where data_da_despesa__c = LAST_N_DAYS:42
+
+3 = SELECT id, name FROM Lead where CreatedDate > 2022-07-16T00:00:00Z AND CreatedDate < 2022-08-16T23:59:59Z
+
+4 = SELECT Id, Name, VIP__c FROM Account WHERE VIP__c = true AND CreatedDate > 2022-07-01T00:00:00Z AND CreatedDate < 2022-08-31T23:59:59Z
