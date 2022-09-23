@@ -1,0 +1,714 @@
+	1 - Criar uma trigger para validar se o campo e-mail está preenchido. Caso não esteja preenchido, o campo Atualizar Cadastro(deve- se criar o campo como check box) será ativado. Uma tarefa deve ser criada para 6 dias depois da criação
+	
+
+	
+	public class LeadBO {
+	public static void atualizaCadastro (List<Lead> lstLead){
+	        for(Lead Counter: lstLead){
+	            if(Counter.email == NULL){
+	                Counter.atualizarCadastro__c = TRUE;
+	            }
+	        }
+	    }
+	    public static void tarefaEmail (List<Lead> lstLead){
+	        List<Task> lstTask = new List<Task>();
+	        	
+	            if(Counter.atualizarCadastro__c == TRUE){
+	                task newTask = new Task();
+	                newTask.Subject = 'Atualizar cadastro';
+	                newTask.Status = 'Not Started';
+	                newTask.Priority = 'Normal';
+	                newTask.ActivityDate = system.now().date() + 6;
+	                newTask.WhoId = Counter.Id;
+	                lstTask.add(newTask); 
+	            }
+	            if(lstLead != NULL){
+	                INSERT lstTask;
+	            }
+	        }    
+	    }
+	}
+	
+
+	
+	Trigger LeadTrigger on Lead (before INSERT, before UPDATE, after INSERT, after UPDATE){
+	    
+	    if(Trigger.isBefore && Trigger.isInsert){
+	        LeadBO.atualizaCadastro(Trigger.new);
+			        
+	    }else if(Trigger.isBefore && Trigger.isUpdate){
+	        LeadBO.atualizaCadastro(Trigger.new);
+	        
+	    }else if(Trigger.isAfter && Trigger.isInsert){
+	        LeadBO.tarefaEmail(Trigger.new);
+	        
+	    }else if(Trigger.isAfter && Trigger.isUpdate){
+	        
+	    }
+	}
+	
+
+	
+	@IsTest
+	public class LeadTest {
+	@IsTest
+	    public static void tarefaEmailPositive(){
+	        Lead newLead   = new Lead(); 
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company          		  = 'Teste SA';
+	        INSERT newLead;
+	        list<Lead> lstLead = new List<Lead>();
+	        lstLead = [SELECT Id, atualizarCadastro__c FROM Lead WHERE Id=:newLead.id];
+	        list<Task> lstTask = new List<Task>();
+	        lstTask = [SELECT Id, WhoId FROM Task WHERE WhoId in: lstLead];
+	        System.assert (lstTask != NULL, 'A tarefa foi criada');    
+	    }
+	    
+	    @IsTest
+	    public static void tarefaEmailNegative(){
+	        Lead newLead = new Lead(); 
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company           		  = 'Teste SA';
+	        newLead.Email 			  = 'Teste@teste.com';
+	        INSERT newLead;
+	        list<Lead> lstLead = new List<Lead>();
+	        lstLead = [SELECT Id, atualizarCadastro__c FROM Lead WHERE Id=:newLead.id];
+	        list<Task> lstTask = new List<Task>();
+	        lstTask = [SELECT Id, WhoId FROM Task WHERE WhoId in: lstLead];
+	        System.assert (lstTask.size() == 0, 'O resultado não é o esperado!');    
+	    }
+	    
+	     @IsTest
+	    public static void atualizaCadastroPositive(){
+	      	Lead newLead = new Lead(); 
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company           		  = 'Teste SA';
+	        INSERT newLead;
+	        list<Lead> lstLead = new List<Lead>();
+	        lstLead = [SELECT Id, atualizarCadastro__c FROM Lead WHERE Id=:newLead.id];
+	    	 System.assert (lstLead[0].atualizarCadastro__c == TRUE, 'O resultado não é o esperado!');    
+	    }
+	  
+	        @IsTest
+	    public static void atualizaCadastroNegative(){
+	      	Lead newLead = new Lead(); 
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company          	               = 'Teste SA';
+	        newLead.Email 			  = 'Teste@teste.com';
+	        INSERT newLead;
+	        list<Lead> lstLead = new List<Lead>();
+	        lstLead = [SELECT Id, atualizarCadastro__c FROM Lead WHERE Id=:newLead.id];
+	    	 System.assert (lstLead[0].atualizarCadastro__c == FALSE, 'O resultado não é o esperado!');    
+	    }
+	    
+	     @IsTest
+	    public static void atualizarCadastroUpdate(){
+	        Lead newLead = new Lead(); 
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company             	  = 'Teste SA';
+	        INSERT newLead;
+	        newLead.email = 'teste@teste.com';
+	        UPDATE newLead;
+	        System.assert (newLead.atualizarCadastro__c == FALSE, 'O resultado não é o esperado!');
+	    }
+	}
+	
+
+
+	 
+	
+
+	2 - Após atualização de uma despesa, se o valor estiver menor ou igual a 15000 uma tarefa associada a ela deve ser criada com o assunto: “Verificar despesas para confirmação”. Caso seja passado um valor negativo, emitir uma mensagem de erro.
+	
+
+	
+	public class DespesaBO {
+	    public static void verificaDespesa (List<Despesa__c> lstDespesa){
+	        List<Task> lstTask = new List<Task>();
+	        for(Despesa__c Counter: lstDespesa){
+	            if(Counter.valor__c < 0){
+	                  Counter.valor__c.addError('Erro - Valor negativo!');
+	            }
+	            else if(Counter.valor__c >= 0 && Counter.valor__c <= 15000){
+	                task newTask = new Task();
+	                newTask.Subject		 = 'Verificar despesas para confirmação';
+	                newTask.Status 		 = 'Not Started';
+	                newTask.Priority		 = 'Normal';
+	                newTask.ActivityDate	 = system.now().date() + 5;
+	                newTask.Whatid 		 = Counter.Id;
+	                lstTask.add(newTask); 
+	            }
+	        }
+	        
+	        if(lstTask != NULL){
+	            INSERT lstTask;
+	        }
+	    }
+	}
+	
+
+	// DespesaTrigger
+	trigger DespesaTrigger on Despesa__c (before INSERT, before UPDATE, after INSERT, after UPDATE) {
+	    
+	    if(Trigger.isBefore && Trigger.isInsert){
+			        
+	    }else if(Trigger.isBefore && Trigger.isUpdate){
+	        
+	    }else if(Trigger.isAfter && Trigger.isInsert){
+	        
+	    }else if(Trigger.isAfter && Trigger.isUpdate){
+	       DespesaBO.verificaDespesa(Trigger.new);
+	        
+	    }
+	}
+	
+
+	//DespesaTest
+	@isTest
+	public class DespesaTest {
+	    
+	    @isTest
+	    public static void verificaDespesaNegative (){
+	        Despesa__c newDespesa = new Despesa__c(); 
+	        newDespesa.RecordTypeId 		  = '0128Z000000dDp8QAE';
+	        newDespesa.valor__c 			  = -100;
+	        INSERT newDespesa;
+	        list<Despesa__c> lstDespesa = new List<Despesa__c>();
+	        lstDespesa = [SELECT Id, valor__c FROM Despesa__c WHERE Id=:newDespesa.id];
+	        list<Task> lstTask = new List<Task>();
+	        lstTask = [SELECT Id, WhatId FROM Task WHERE WhatId in: lstDespesa];
+	        System.assert (lstTask.size() == 0, 'O resultado não é o esperado!');     
+	    }
+	    
+	    @isTest
+	    public static void verificaDespesaPositive (){
+	        Despesa__c newDespesa = new Despesa__c(); 
+	        newDespesa.RecordTypeId 		  = '0128Z000000dDp8QAE';
+	        newDespesa.valor__c 			  = 1000;
+	        INSERT newDespesa;
+	        UPDATE newDespesa;
+	        list<Despesa__c> lstDespesa = new List<Despesa__c>();
+	        lstDespesa = [SELECT Id, valor__c FROM Despesa__c WHERE Id=:newDespesa.id];
+	        list<Task> lstTask = new List<Task>();
+	        lstTask = [SELECT Id, WhatId FROM Task WHERE WhatId =: lstDespesa];
+	        System.assert (lstTask.size() != 0, 'O resultado não é o esperado!');     
+	    }    
+	    
+	    @isTest
+	    public static void testError() {
+	        Boolean exceptionThrown = false;
+	        try {
+	            Despesa__c newDespesa = new Despesa__c(); 
+	            newDespesa.RecordTypeId 		  = '0128Z000000dDp8QAE';
+	            newDespesa.valor__c 			  = -1000;
+	            INSERT newDespesa;
+	            UPDATE newDespesa; 
+	        } catch (Exception e) {
+	            exceptionThrown = true;
+	            Boolean expectedExceptionThrown =  (e.getMessage().contains('Erro - Valor negativo!')) ? true : false; 
+	            System.AssertEquals(true, expectedExceptionThrown, e.getMessage()); 
+	        } 
+	        System.assertEquals(true, exceptionThrown, 'O erro não foi emitido!');
+	    }
+	}
+	
+
+	 
+	
+
+	3 - Criar uma trigger em Conta, caso o CPF não seja preenchido e que apenas aceite numerações de CPF verdadeiras.
+	(Realizar teste com um gerador de CPF online)
+	
+
+	//AccountBO (Apenas o método)
+	  public static void validaCPFAcc(List<Account> lstAccount){
+	        for(Account Counter: lstAccount){
+	            string cpf = Counter.cpf__C;
+	            list<string> seq = new list<string>(10);
+	            for(integer k=0; k<=9; k++){
+	                seq[k] = string.valueof(k).repeat(11);		
+	            }
+	            if(seq.contains(cpf)){
+	                 counter.cpf__C.addError('CPF INVÁLIDO!');
+	            }else{
+	                integer soma1, verifica1, valida1, soma2, verifica2, valida2;
+	                if(cpf.length()==11){        
+	                    list <integer> valor1 = new list<integer>();
+	                    for(integer i=10;i>=2;i--){
+	                        valor1.add(i*integer.valueof(cpf.mid(10-i,1)));
+	                    }
+	                    soma1 = valor1[0]+valor1[1]+valor1[2]+valor1[3]+valor1[4]+valor1[5]+valor1[6]+valor1[7]+valor1[8];
+	                    verifica1=11-math.mod(soma1,11);
+	                    if(verifica1>9){
+	                        valida1=0;
+	                    }else{
+	                        valida1=verifica1;
+	                    }
+	                    if(valida1==integer.valueof(cpf.mid(9,1))){
+	                        list <integer> valor2 = new list<integer>();
+	                        for(integer n=11;n>=2;n--){
+	                            valor2.add(n*integer.valueof(cpf.mid(11-n,1)));
+	                        }
+	                        soma2 = valor2[0]+valor2[1]+valor2[2]+valor2[3]+valor2[4]+valor2[5]+valor2[6]+valor2[7]+valor2[8]+valor2[9];
+	                        verifica2=11-math.mod(soma2,11);
+	                        if(verifica2>9){
+	                            valida2=0;
+	                        }else{
+	                            valida2=verifica2;
+	                        }
+	                        if(valida2==integer.valueof(cpf.mid(10,1))){
+	                             System.debug('CPF OK!');
+	                        }else{
+	                             counter.cpf__C.addError('CPF INVÁLIDO!');
+	                        }
+	                        
+	                    }else{
+	                        counter.cpf__C.addError('CPF INVÁLIDO!');
+	                    }
+	                }else{
+	                     counter.cpf__C.addError('CPF INVÁLIDO!');
+	                }
+	            }
+	        }
+	
+
+	 // AccountTest
+	@IsTest
+	     public static void validaCPFAccPositive(){
+	        Account newAccount   = new Account(); 
+	        newAccount.Name 		    = 'Teste';
+	        newAccount.Phone          		    = '888';
+	        newAccount.CPF__c		    = '12345678909';
+	        newAccount.annualRevenue  	    = 90000 ;
+	        INSERT newAccount;
+	        Account AccountCriado = [SELECT Id FROM Account WHERE Id=:newAccount.id];
+	        System.assert (newAccount.cpf__c == '12345678909', 'A classificação não esta como Cold');
+	        
+	    }
+	    
+	    @IsTest
+	     public static void validaCPFAccNegative(){
+	         Boolean exceptionThrown = false;
+	        Account newAccount   = new Account(); 
+	        newAccount.Name 		    = 'Teste';
+	        newAccount.Phone           	    = '888';
+	        newAccount.CPF__c		    = '12345678910';
+	        newAccount.annualRevenue    	    = 90000 ;
+	          try{
+	        INSERT newAccount;
+	          
+	        }catch (Exception e){
+	            exceptionThrown = true;
+	            Boolean expectedExceptionThrown =  (e.getMessage().contains('CPF INVÁLIDO!')) ? true : false; 
+	            System.AssertEquals(true, expectedExceptionThrown, e.getMessage()); 
+	        } 
+	        System.assertEquals(true, exceptionThrown, 'O erro não foi emitido!');
+	    }
+	
+
+	 
+	
+
+	4 - Crie uma trigger em Lead que antes de inserir um novo lead, coloque informações nos campos fax (XX) XXXXX - XXXX, Site www.example.com, e receita anual 0.
+	
+
+	
+
+	// LeadBo (Apenas o método)
+	    public static void preencheLead (List <lead> lstLead){
+	        for(Lead Counter: lstLead){
+	            Counter.Fax = '(XX) XXXXX - XXXX';
+	            Counter.Website = 'www.example.com';
+	            Counter.AnnualRevenue = 0;
+	        }
+	    }
+	
+
+	// LeadTest
+	@IsTest
+	    public static void preencheLeadPositive (){
+	        list<Lead> isWorking = new List<Lead>();
+	        Lead newLead = new Lead();
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company                          = 'Teste SA';
+	        INSERT newLead;
+	        list<Lead> lstLead = new List<Lead>();
+	        lstLead = [SELECT Id, AnnualRevenue, Website, Fax FROM Lead WHERE Id=:newLead.id];
+	        for(lead Counter: lstLead){
+	            if(Counter.Fax == '(XX) XXXXX - XXXX' && Counter.Website == 'www.example.com' && Counter.AnnualRevenue == 0){
+	                isWorking.add(Counter);
+	            }
+	        }
+	        System.assert (isWorking.size() > 0, 'O resultado não é o esperado!');
+	    }
+	
+
+	 
+	
+
+	
+
+	5 - Altere o código da trigger de Lead realizando condições para verificar se:
+	    se o fax estiver vazio, atribuir sem fax 
+	se site estiver vazio, atribuir site indefinido
+	se receita anual estiver vazio, atribuir 0
+	
+
+	// LeadBo (Apenas o método)
+	public static void verificaVazio (List <lead> lstLead){
+	        for(Lead Counter: lstLead){
+	            if(Counter.Fax == NULL){
+	                Counter.Fax = 'Sem fax';
+	            }
+	            if(Counter.Website == NULL){
+	                Counter.Website = 'Site indefinido';
+	            }
+	            if(Counter.AnnualRevenue == NULL){
+	                Counter.AnnualRevenue = 0;
+	            }
+	        }
+	    }
+	  
+	
+
+	// LeadTest
+	@IsTest
+	    public static void verificaVazioPositiveInsert (){
+	        list<Lead> isWorking = new List<Lead>();
+	        Lead newLead = new Lead();
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company          		  = 'Teste SA';
+	        INSERT newLead;
+	        list<Lead> lstLead = new List<Lead>();
+	        lstLead = [SELECT Id, AnnualRevenue, Website, Fax FROM Lead WHERE Id=:newLead.id];
+	        for(lead Counter: lstLead){
+	            if(Counter.AnnualRevenue == 0 && Counter.Website == 'Site indefinido' && Counter.Fax == 'Sem fax'){
+	                isWorking.add(Counter);
+	            }
+	        }
+	        System.assert (isWorking.size() > 0, 'O resultado não é o esperado!');
+	    }
+	    
+	    @IsTest
+	    public static void verificaVazioNegativeInsert (){
+	        list<Lead> isWorking = new List<Lead>();
+	        Lead newLead = new Lead();
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company         		  = 'Teste SA';
+	        newLead.Fax 			  = '123';
+	        INSERT newLead;
+	        list<Lead> lstLead = new List<Lead>();
+	        lstLead = [SELECT Id, AnnualRevenue, Website, Fax FROM Lead WHERE Id=:newLead.id];
+	        for(lead Counter: lstLead){
+	            if(Counter.Fax == 'Sem fax'){
+	                isWorking.add(Counter);
+	            }
+	        }
+	        System.assert (isWorking.size() == 0, 'O resultado não é o esperado!');
+	    }
+	    
+	    @IsTest
+	    public static void verificaVazioPositiveUpdate (){
+	        list<Lead> isWorking = new List<Lead>();
+	        Lead newLead = new Lead();
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company         		  = 'Teste SA';
+	        newLead.Fax 			  = '123';
+	        INSERT newLead;
+	        newLead.Fax 			  = '';
+	        UPDATE newLead;
+	        list<Lead> lstLead = new List<Lead>();
+	        lstLead = [SELECT Id, AnnualRevenue, Website, Fax FROM Lead WHERE Id=:newLead.id];
+	        for(lead Counter: lstLead){
+	            if(Counter.Fax == 'Sem fax'){
+	                isWorking.add(Counter);
+	            }
+	        }
+	        System.assert (isWorking.size() > 0, 'O resultado não é o esperado!');
+	    }
+		
+	        @IsTest
+	    public static void verificaVazioNegativeUpdate (){
+	        list<Lead> isWorking = new List<Lead>();
+	        Lead newLead = new Lead();
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company         		  = 'Teste SA';
+	        INSERT newLead;
+	        newLead.Fax 			  = '123';
+	        UPDATE newLead;
+	        list<Lead> lstLead = new List<Lead>();
+	        lstLead = [SELECT Id, AnnualRevenue, Website, Fax FROM Lead WHERE Id=:newLead.id];
+	        for(lead Counter: lstLead){
+	            if(Counter.Fax == 'Sem fax'){
+	                isWorking.add(Counter);
+	            }
+	        }
+	        System.assert (isWorking.size() == 0, 'O resultado não é o esperado!');
+	    }
+	
+
+	 
+	
+	
+
+	6 - Realize uma trigger onde ao criar uma oportunidade caso o valor da oportunidade seja >= a 50000 e <= 790000, a fase deve ser colocada automaticamente para “Aguardando”, senão a fase deve ficar em “Pagamento”.
+	
+
+	// OpportunityBo (Apenas o método)
+	    public static void verificaFase (List <Opportunity> lstOpp){
+	        for(Opportunity Counter: lstOpp){
+	            if(Counter.Amount >= 50000 && Counter.Amount <= 790000){
+	                Counter.StageName = 'Aguardando';
+	            }else{
+	                Counter.StageName = 'Pagamento';
+	            }
+	        }
+	    }
+	
+
+	// OpportunityTest
+	@IsTest
+	    public static void verificaFasePositive(){
+	        Opportunity newOpportunity   = new Opportunity(); 
+	        newOpportunity.type		  = '0128Z000000dEEmQAM';
+	        newOpportunity.name      	  = 'Teste SA';
+	        newOpportunity.closeDate 	  = system.today();
+	        newOpportunity.Amount 	 	  = 50001;
+	        INSERT newOpportunity;
+	        Opportunity oppCriada = [SELECT Id, Amount FROM Opportunity WHERE Id=:newOpportunity.id];
+	        System.assert (newOpportunity.stageName == 'Aguardando', 'O valor não é o esperado');
+	    }
+	    
+	    @IsTest
+	    public static void verificaFaseNegative(){
+	        Opportunity newOpportunity   = new Opportunity(); 
+	        newOpportunity.type		  = '0128Z000000dEEmQAM';
+	        newOpportunity.name       	  = 'Teste SA';
+	        newOpportunity.closeDate 	  = system.today();
+	        newOpportunity.Amount 		  = 4000;
+	        INSERT newOpportunity;
+	        Opportunity oppCriada = [SELECT Id, Amount FROM Opportunity WHERE Id=:newOpportunity.id];
+	        System.assert (newOpportunity.stageName == 'Pagamento', 'O valor não é o esperado');
+	    }
+	
+
+	 
+	
+
+	
+
+	7 - atualize o código da trigger de Lead, adicionando as seguintes condições: Se receita anual >= 0 e < 10000
+	a classificação deverá ser Cold Se receita anual >= 10000 e < 100000
+	a classificação deverá ser Warm Se receita anual >= 100000
+	a classificação é Hot
+	
+
+	//LeadBO (Apenas o método)
+	public static void verificaReceita (List <Lead> lstLead){
+	        for(Lead Counter: lstLead){
+	            if(Counter.AnnualRevenue >= 0 && Counter.AnnualRevenue < 10000){
+	                Counter.Rating = 'Cold';
+	            }else if(Counter.AnnualRevenue >= 10000 && Counter.AnnualRevenue < 100000){
+	                Counter.Rating = 'Warm';
+	            }else if(Counter.AnnualRevenue >= 100000){
+	                Counter.Rating = 'Hot';
+	            }
+	        }
+	    }
+	
+
+	//LeadTest
+	    @IsTest
+	    public static void verificaReceitaCold (){
+	        list<Lead> isWorking = new List<Lead>();
+	        Lead newLead = new Lead();
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company          		  = 'Teste SA';
+	        newLead.AnnualRevenue   	  = 0;
+	        INSERT newLead;
+	        list<Lead> lstLead = new List<Lead>();
+	        lstLead = [SELECT Id, Rating FROM Lead WHERE Id=:newLead.id];
+	        for(lead Counter: lstLead){
+	            if(Counter.Rating == 'Cold'){
+	                isWorking.add(Counter);
+	            }
+	        }
+	        System.assert (isWorking.size() > 0, 'O resultado não é o esperado!');
+	    }
+	    
+	    @IsTest
+	    public static void verificaReceitaWarm (){
+	        list<Lead> isWorking = new List<Lead>();
+	        Lead newLead = new Lead();
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company        	               = 'Teste SA';
+	        newLead.AnnualRevenue   	  = 10000;
+	        INSERT newLead;
+	        list<Lead> lstLead = new List<Lead>();
+	        lstLead = [SELECT Id, Rating FROM Lead WHERE Id=:newLead.id];
+	        for(lead Counter: lstLead){
+	            if(Counter.Rating == 'Warm'){
+	                isWorking.add(Counter);
+	            }
+	        }
+	        System.assert (isWorking.size() > 0, 'O resultado não é o esperado!');
+	    }
+	    
+	    @IsTest
+	    public static void verificaReceitaHot (){
+	        list<Lead> isWorking = new List<Lead>();
+	        Lead newLead = new Lead();
+	        newLead.LastName 		  = 'Teste';
+	        newLead.Company          		  = 'Teste SA';
+	        newLead.AnnualRevenue    	  = 100000;
+	        INSERT newLead;
+	        list<Lead> lstLead = new List<Lead>();
+	        lstLead = [SELECT Id, Rating FROM Lead WHERE Id=:newLead.id];
+	        for(lead Counter: lstLead){
+	            if(Counter.Rating == 'Hot'){
+	                isWorking.add(Counter);
+	            }
+	        }
+	        System.assert (isWorking.size() > 0, 'O resultado não é o esperado!');
+	    }
+	
+
+	 
+	
+
+	
+
+	8 - Preencha a descrição do contato com o nome de usuário modificado quando o usuário atualizar o contato, além disso um campo com nome “Contato Alterado” deve ser ativado. (O tipo de campo não pode ser uma check Box)
+	
+
+	
+
+	//ContactBo
+	public static void atualizaDescricao (List<Contact> lstContact){
+	        for(Contact Counter: lstContact){
+	            List <Contact> counterList = [SELECT Id, LastModifiedBy.Name FROM Contact WHERE Id =: Counter.id];
+	            for(contact Counter2: counterList){
+	                String Descricao = ('Ultima alteração feita por: ' + Counter2.LastModifiedBy.Name);
+	                Counter.Description = Descricao;
+	                Counter.contatoAlterado__c = “Contato Alterado!”;
+	            } 
+	        }
+	    }
+	
+
+	//ContactTest
+	@IsTest
+	    public static void atualizaDescricao(){
+	        
+	        Contact newContact = new Contact();
+	        newContact.LastName = 'Test';
+	        INSERT newContact;
+	        UPDATE newContact;
+	        Contact newContactList = [SELECT id, description FROM Contact WHERE id =: newContact.id];
+	        
+	        System.assert(newContactList.Description != NULL, 'O resultado não é o esperado');
+	        
+	    }
+	
+
+	 
+	
+
+	9 - Preencha uma descrição do contato quando o usuário criar um contato.
+	
+
+	//ContactBO (Apenas o método)
+	public static void preencheDescricao (List<Contact> lstContact){
+	        for(Contact Counter: lstContact){
+	            Counter.Description = 'Uma descrição qualquer!';
+	        }
+	    }
+	
+
+	
+
+	//ContactTest
+	@IsTest
+	    public static void preencheDescricao(){
+	        
+	        Contact newContact = new Contact();
+	        newContact.LastName = 'Test';
+	        INSERT newContact;
+	        UPDATE newContact;
+	        Contact newContactList = [SELECT id, description FROM Contact WHERE id =: newContact.id];
+	        
+	        System.assert(newContactList.Description != NULL, 'O resultado não é o esperado');
+	        
+	    }
+	
+
+	 
+	
+
+	10 - Realize a inserção dos cenários dos exercícios 8 e 9 acima em um gatilho.
+	
+
+	// Usando o CTRL + E no Developer Console:
+	        Contact newContact = new Contact();
+	        newContact.LastName = 'Test';
+	        INSERT newContact;
+	
+
+	11 - Em oportunidade, quando a fase for alterada para Closed Lost, deve ser inserido um motivo. Se a fase estiver em Closed Lost e o motivo estiver vazio, emitir uma mensagem de erro. O motivo deve ser preenchido.
+	
+
+	//OpportunityBO (Apenas o método)
+	public static void motivoPerda (List <Opportunity> lstOpp){
+	        for(Opportunity Counter: lstOpp){
+	            if(Counter.StageName == 'Closed Lost' && Counter.Description == NULL){
+	                Counter.Description.addError('Preencha o motivo da perda!');
+	            }
+	        }
+	    }
+	
+
+	//OpportunityTest
+	@IsTest
+	    public static void motivoPerdaPositive(){
+	        Boolean exceptionThrown = false;
+	        Opportunity newOpportunity   = new Opportunity(); 
+	        newOpportunity.type		  = '0128Z000000dEEmQAM';
+	        newOpportunity.name       = 'Teste SA';
+	        newOpportunity.closeDate  = system.today();
+	        newOpportunity.Amount  	  = 4000;
+	        newOpportunity.StageName  	  = 'Prospecting';
+	        INSERT newOpportunity;
+	        newOpportunity.StageName  = 'Closed Lost';
+	        try{
+	            UPDATE newOpportunity;
+	        }catch (Exception e){
+	            exceptionThrown = true;
+	            Boolean expectedExceptionThrown =  (e.getMessage().contains('Preencha o motivo da perda!')) ? true : false; 
+	            System.AssertEquals(true, expectedExceptionThrown, e.getMessage()); 
+	        } 
+	        System.assertEquals(true, exceptionThrown, 'O erro não foi emitido!');
+	    }
+	    
+	    @IsTest
+	    public static void motivoPerdaNegative(){
+	        Boolean exceptionThrown = false;
+	        Opportunity newOpportunity   = new Opportunity(); 
+	        newOpportunity.type		  	 = '0128Z000000dEEmQAM';
+	        newOpportunity.name       	 = 'Teste SA';
+	        newOpportunity.closeDate  	 = system.today();
+	        newOpportunity.Amount  	  	 = 4000;
+	        newOpportunity.StageName  	 = 'Prospecting';
+	        newOpportunity.Description	 = 'Motivo da perda!';
+	        INSERT newOpportunity;
+	        newOpportunity.StageName  = 'Closed Lost';
+	        try{
+	            UPDATE newOpportunity;
+	        }catch (Exception e){
+	            exceptionThrown = true;
+	        } 
+	        System.assertEquals(false, exceptionThrown, 'O erro não foi emitido!');
+	    }
+	
+
+	 
+
