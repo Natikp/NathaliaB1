@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>EX-03</title>
+  <style>
+    body {
+      background-image: url('https://previews.123rf.com/images/godfather744431/godfather7444311408/godfather744431140800303/30393252-school-stationery-collection.jpg?fj=1');
+      box-sizing: border-box;
+      background-color: #ddd;
+      background-size: auto;
+      padding: 0;
+      margin: 0;
+    }
+
+    .container {
+
+      background-color: aliceblue;
+      justify-content: flex-start;
+      flex-direction: column;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      height: 100vh;
+      display: flex;
+    }
+
+    h1 {
+      display: inline-block;
+    }
+
+    table,
+    tr,
+    td {
+      border: 1px solid black;
+    }
+
+    img {
+      height: 70px;
+      width: 70px;
+    }
+
+    td {
+      vertical-align: middle;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .bColor {
+      background-color: aqua;
+      transition: background-color ease-in-out 0.5s;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Mamaco King</h1>
+    <table>
+      <caption>Mamaco's branch</caption>
+      <tr>
+        <td colspan="5">Popeye stationery</td>
+      </tr>
+      <tr>
+        <td>Foto do Item</td>
+        <td>Nome do Item</td>
+        <td>Quantidade em estoque</td>
+        <td>Preço Normal</td>
+        <td>Preço promocional</td>
+      </tr>
+      <tr>
+        <td><img src="https://images.vexels.com/media/users/3/151254/isolated/lists/f27f613dda37ada2a037162b1a861b8d-icone-de-doodle-de-caderno-espiral-superior.png" alt="caderno"></td>
+        <td>Caderno</td>
+        <td>100</td>
+        <td>23,50</td>
+        <td>18,99</td>
+      </tr>
+      <tr>
+        <td><img src="https://images.vexels.com/media/users/3/151173/isolated/lists/ec24424549b081f2adc026a68c6ba230-icone-de-lapis-de-desenho.png" alt="Lapis"></td>
+        <td>Lapis</td>
+        <td>300</td>
+        <td>5,70</td>
+        <td>3,99</td>
+      </tr>
+      <tr>
+        <td><img src="https://images.vexels.com/media/users/3/151213/isolated/lists/bb2fe150d6a100599eaed8f7cc2fab67-icone-de-tesoura-doodle.png" alt="Tesoura"></td>
+        <td>Tesoura</td>
+        <td>150</td>
+        <td>8,19</td>
+        <td>5,99</td>
+      </tr>
+      <tr>
+        <td><img src="https://images.vexels.com/media/users/3/151172/isolated/lists/99f14da1081c9abd4df51e852230eeec-icone-de-caneta-doodle.png" alt="Caneta"></td>
+        <td>Caneta</td>
+        <td>1200</td>
+        <td>3,70</td>
+        <td>2,99</td>
+      </tr>
+      <tr>
+        <td><img src="https://images.vexels.com/media/users/3/151209/isolated/lists/9a7d9e14f5b843ff75222eb546db0067-icone-do-doodle-da-regua.png" alt="Regua"></td>
+        <td>Regua</td>
+        <td>380</td>
+        <td>9,99</td>
+        <td>7,58</td>
+      </tr>
+    </table>
+  </div>
+  <script>
+    const celulas = document.querySelectorAll('td');
+    celulas.forEach((tagItem) => {
+      tagItem.addEventListener('mouseover', () => {
+        tagItem.classList.add('bColor');
+      })
+    });
+
+    celulas.forEach((tagItem) => {
+      tagItem.addEventListener('mouseout', () => {
+        tagItem.classList.remove('bColor');
+      })
+    })
+  </script>
+</body></html>
