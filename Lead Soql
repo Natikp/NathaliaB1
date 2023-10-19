@@ -1,0 +1,6 @@
+
+SELECT Id, Name, CreatedDate
+  FROM Lead
+  WHERE CreatedDate > 2022-07-16T12:16:43.000+0000 
+    AND CreatedDate < 2022-08-16T12:16:43.000+0000 
+(Lead Soql)
