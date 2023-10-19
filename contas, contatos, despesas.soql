@@ -1,0 +1,17 @@
+
+SELECT COUNT(Id), Conta__r.Name, SUM(Valor__c), MIN(Valor__c), MAX(Valor__c), AVG(Valor__c)
+  FROM Despesa__c
+  GROUP BY Conta__r.Name
+
+(despesa soql)
+
+SELECT Name, (SELECT Name
+FROM Contacts)
+  FROM Contact
+
+(contato.soql)
+
+SELECT Id, Name
+  FROM Account
+  LIMIT 3
+(conta.soql)
